@@ -17,4 +17,8 @@
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Payspace_Assessment\Payspace_Assessment.csproj" />
+  </ItemGroup>
+
 </Project>

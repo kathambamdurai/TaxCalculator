@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Payspace_Assessment.Models.TaxCalculationDetails>
+
+@{
+    ViewData["Title"] = "Transactions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-primary">Transactions</h1>
+
+<div class="row p-2">
+    <div class="col-3">
+        @using (Html.BeginForm("Index", "TaxCalculator", FormMethod.Get))
+        {
+            <button type="submit" class="btn btn-primary">Back</button>
+        }
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.Label("Postal Code")
+            </th>
+            <th>
+                @Html.Label("Tax Calculation Type")
+            </th>
+            <th>
+                @Html.Label("Annual Income")
+            </th>
+            <th>
+                @Html.Label("Tax Amount")
+            </th>
+            <th>
+                @Html.Label("Calculated On")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostalCodeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaxCalculationName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AnnualIncome, new { @class = "form-control text-right" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaxAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CalculatedOn)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

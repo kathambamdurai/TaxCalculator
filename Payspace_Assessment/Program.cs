@@ -1,23 +1,38 @@
-var builder = WebApplication.CreateBuilder(args);
+using NLog;
+using NLog.Web;
+using Payspace_Assessment;
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseExceptionHandler("/Home/Error");
+    public static void Main(string[] args)
+    {
+        var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+        try
+        {
+            logger.Debug("init main");
+            CreateHostBuilder(args).Build().Run();
+        }
+        catch (Exception exception)
+        {
+            logger.Error(exception, "Stopped program because of exception");
+            throw;
+        }
+        finally
+        {
+            NLog.LogManager.Shutdown();
+        }
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
+             .ConfigureLogging(logging =>
+             {
+                 logging.ClearProviders();
+                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+             })
+            .UseNLog();
 }
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
